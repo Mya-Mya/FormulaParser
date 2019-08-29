@@ -97,18 +97,7 @@ public class FormulaParser {
                 continue;
             }
 
-            if (firstC == '(') {
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Bra));
-                lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(1);
-                continue;
-            }
-            if (firstC == ')') {
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Clb));
-                lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(1);
-                continue;
-            }
+
             if (rawMathFormula.startsWith("abs")) {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Abs));
                 lastTokenWasNumber = false;
@@ -142,12 +131,31 @@ public class FormulaParser {
             if (rawMathFormula.startsWith("sqrt")) {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Sqr));
                 lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(3);
+                rawMathFormula = rawMathFormula.substring(4);
                 continue;
             }
             if (rawMathFormula.startsWith("^")) {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Pow));
                 lastTokenWasNumber = false;
+                rawMathFormula = rawMathFormula.substring(1);
+                continue;
+            }
+            if (lastTokenWasNumber&&firstC == '(') {//ひとつ前のトークンが数なら * がこの前に入る
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Mul));
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Bra));
+                lastTokenWasNumber = false;
+                rawMathFormula = rawMathFormula.substring(1);
+                continue;
+            }
+            if (!lastTokenWasNumber&&firstC == '(') {
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Bra));
+                lastTokenWasNumber = false;
+                rawMathFormula = rawMathFormula.substring(1);
+                continue;
+            }
+            if (firstC == ')') {
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Clb));
+                lastTokenWasNumber = true;
                 rawMathFormula = rawMathFormula.substring(1);
                 continue;
             }
@@ -157,14 +165,13 @@ public class FormulaParser {
                 rawMathFormula = rawMathFormula.substring(1);
                 continue;
             }
-
             //これより下は今のトークンは数
-
             if (lastTokenWasNumber) {//ひとつ前のトークンも数なら
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Mul));
                 lastTokenWasNumber = false;
                 continue;
             }
+
 
             StringBuilder numberText = new StringBuilder(String.valueOf(firstC));
             int i = 1;
