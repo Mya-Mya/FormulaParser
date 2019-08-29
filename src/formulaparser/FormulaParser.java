@@ -97,7 +97,6 @@ public class FormulaParser {
                 continue;
             }
 
-
             if (rawMathFormula.startsWith("abs")) {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Abs));
                 lastTokenWasNumber = false;
@@ -172,7 +171,6 @@ public class FormulaParser {
                 continue;
             }
 
-
             StringBuilder numberText = new StringBuilder(String.valueOf(firstC));
             int i = 1;
 
@@ -185,7 +183,7 @@ public class FormulaParser {
                 }
             }
 
-            boolean alphabetMode = Character.isAlphabetic(firstC)||firstC=='-';
+            boolean alphabetMode = Character.isAlphabetic(firstC);
             if (alphabetMode) {//最初がアルファベットで
                 for (i = 1; i < rawMathFormula.length(); i++) {
                     if (Character.isAlphabetic(rawMathFormula.charAt(i)))

@@ -8,7 +8,7 @@ public class OperatorToken implements Token {
                 case Bra:case Clb:return 1;
                 case Add: case Sub: return 2;
                 case Mul: case Div: return 3;
-                case Pow: return 4;
+                case Pow: case Sqr: case Abs: case Exp: case Sin: case Cos: case Tan: return 4;
             }
             return 0;
         }
