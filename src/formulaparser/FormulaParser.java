@@ -78,6 +78,12 @@ public class FormulaParser {
                 rawMathFormula = rawMathFormula.substring(2);
                 continue;
             }
+            if (rawMathFormula.startsWith("^")) {
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Pow));
+                lastTokenWasNumber = false;
+                rawMathFormula = rawMathFormula.substring(1);
+                continue;
+            }
             if (firstC == '*' || firstC == ' ') {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Mul));
                 lastTokenWasNumber = false;
@@ -96,7 +102,12 @@ public class FormulaParser {
                 rawMathFormula = rawMathFormula.substring(1);
                 continue;
             }
-
+            if(lastTokenWasNumber&&firstC=='-'){//ひとつ前のトークンが数ならこれは減算子
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Sub));
+                lastTokenWasNumber=false;
+                rawMathFormula=rawMathFormula.substring(1);
+                continue;
+            }
             if (firstC == ')') {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Clb));
                 lastTokenWasNumber = true;
@@ -104,7 +115,9 @@ public class FormulaParser {
                 continue;
             }
 
+
             //ここより下はひとつ前のトークンが演算子であることが期待される
+
             if (lastTokenWasNumber) {//ひとつ前のトークンも数なら
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Mul));
                 lastTokenWasNumber = false;
@@ -153,27 +166,6 @@ public class FormulaParser {
                 rawMathFormula = rawMathFormula.substring(4);
                 continue;
             }
-            if (rawMathFormula.startsWith("^")) {
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Pow));
-                lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(1);
-                continue;
-            }
-            if (lastTokenWasNumber&&firstC == '(') {//ひとつ前のトークンが数なら * がこの前に入る
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Mul));
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Bra));
-                lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(1);
-                continue;
-            }
-
-            if (lastTokenWasNumber && firstC == '-') {//ひとつ前のトークンが数なら - は演算子
-                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Sub));
-                lastTokenWasNumber = false;
-                rawMathFormula = rawMathFormula.substring(1);
-                continue;
-            }
-            //これより下は今のトークンは数
 
 
             StringBuilder numberText = new StringBuilder(String.valueOf(firstC));
