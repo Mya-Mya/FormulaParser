@@ -48,7 +48,7 @@ public class FormulaParser {
                         continue;
                     }
                     int nextTokenLevel = ((OperatorToken) nextToken).getLevel();
-                    while (!operators.isEmpty() && nextTokenLevel >= ((OperatorToken) operators.peek()).getLevel()) {
+                    while (!operators.isEmpty() && nextTokenLevel <= ((OperatorToken) operators.peek()).getLevel()) {
                         invpolTokens.offer(operators.pop());
                     }
                     operators.push(nextToken);

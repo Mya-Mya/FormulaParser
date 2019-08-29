@@ -5,11 +5,10 @@ public class OperatorToken implements Token {
         Add, Sub, Mul, Div, Pow, Sqr, Abs, Exp, Sin, Cos, Tan, Bra, Clb;
         public int getLevel(){
             switch (this){
-                case Bra:case Clb:return 5;
-                case Add: case Sub: return 4;
+                case Bra:case Clb:return 1;
+                case Add: case Sub: return 2;
                 case Mul: case Div: return 3;
-                case Pow: return 2;
-                case Sqr: case Abs: case Exp: case Sin: case Cos: case Tan:return 1;
+                case Pow: return 4;
             }
             return 0;
         }
