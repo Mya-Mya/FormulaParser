@@ -139,6 +139,12 @@ public class FormulaParser {
                 rawMathFormula = rawMathFormula.substring(3);
                 continue;
             }
+            if (rawMathFormula.startsWith("sqrt")) {
+                mathTokens.offer(new OperatorToken(OperatorToken.Kind.Sqr));
+                lastTokenWasNumber = false;
+                rawMathFormula = rawMathFormula.substring(3);
+                continue;
+            }
             if (rawMathFormula.startsWith("^")) {
                 mathTokens.offer(new OperatorToken(OperatorToken.Kind.Pow));
                 lastTokenWasNumber = false;
